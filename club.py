@@ -1,13 +1,29 @@
-people = [
-    {"name": "Орлов", "grade": 7, "hours": 12},
-    {"name": "Белова", "grade": 9, "hours": 20},
-    {"name": "Шаров", "grade": 10, "hours": 16},
-    {"name": "Новикова", "grade": 8, "hours": 9}
-]
+import csv
 
-def label(per):
-    return f"фамилия: {per['name']}, {per['grade']} класс, {per['hours']} ч."
+people = []
 
-for p in people:
-    text = label(p)
-    print(text)
+def person(row):
+    return {"name":row['name'], "grade":int(row['grade']), "hours":int(row['hours'])}
+with open('club.csv', encoding='utf-8') as f:
+    reader = csv.DictReader(f)
+
+    total = 0
+    for row in reader:
+        row_int = person(row)
+        people.append(row_int)
+        total += row_int["hours"]
+print(total)
+
+
+
+
+try:
+    with open('SUN.csv', 'w', encoding='utf-8', newline="") as f:
+        write = csv.DictWriter(f, fieldnames=["name", "grade", "hours"])
+        write.writeheader()
+
+        for row in people:
+            if row['grade'] >= 9:
+                write.writerow(row)
+except FileNotFoundError:
+    print("ошибка, ля ля ля")
